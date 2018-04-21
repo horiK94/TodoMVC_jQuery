@@ -28,3 +28,8 @@ body #content #input-screen form #todo-input {
     font-size: 22px;
     font-weight: lighter;
 }
+
+.done{
+    color: gray;
+    text-decoration: line-through;
+}

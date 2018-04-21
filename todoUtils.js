@@ -12,10 +12,11 @@ $(()=>{
         todos.push({'text': text, 'isDone': false})
     }
 
+    // 全タスクの表示
     function showTodo(){
         $('.todo').remove()
         for(let i = 0; i < todos.length; i++){
-            $('#todo-list').append(
+            const todo_list = $('#todo-list').append(
                 '<div class="todo" value="'+i+'">' +
                 '   <input type="checkbox" name="todo" class="todo-done">' +
                 '   <span class="text">' + todos[i].text + '</span>' +
@@ -23,13 +24,15 @@ $(()=>{
                 '</div>'
             )
             if(todos[i].isDone){
-                addDoneClass($('todo-list'), index)
+                todo_list.children('[value='+i+']').children('.todo-done[name=todo]').prop('checked', true)
+                addDoneClass(todo_list.children('[value='+i+']'))
             }
         }
     }
 
-    function addDoneClass(parentElement, index){
-        $(parentElement+' .todo [.todo').addClass('done')
+    // doneクラスの追加(横線&灰色表示を行うクラスにつける)
+    function addDoneClass(parentElement){
+        $(parentElement).children('span').addClass('done')
     }
 
     // checkboxを参考にtodosを書き換える
@@ -47,12 +50,14 @@ $(()=>{
     $('#all').change(() => {
         $('.todo-done[name=todo]').prop('checked', $('#all').prop('checked'))
         refreshTodoDone()
+        showTodo()
     })
 
     $('#todo-list').on('click', '.todo-done', (e) => {
         // 正直他に方法あると思う
         const index = parseInt($($($(e)[0].currentTarget).parent()[0]).context.attributes.value.value)
         todos[index].isDone = $($('.todo-done[name=todo]')[index]).prop('checked')
+        showTodo()
     })
 
     $('#todo-list').on('click', '.todo-delete', (e) => {
