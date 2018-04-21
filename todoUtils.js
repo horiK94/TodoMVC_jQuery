@@ -45,6 +45,16 @@ $(()=>{
         }
     }
 
+    // 全てのタスクが完了しているかどうか
+    function isAllChecked(){
+        for(let i = 0; i < todos.length; i++){
+            if(!todos[i].isDone){
+                return false
+            }
+        }
+        return true
+    }
+
     // チェックボックス関連
 
     $('#all').change(() => {
@@ -57,6 +67,7 @@ $(()=>{
         // 正直他に方法あると思う
         const index = parseInt($($($(e)[0].currentTarget).parent()[0]).context.attributes.value.value)
         todos[index].isDone = $($('.todo-done[name=todo]')[index]).prop('checked')
+        $('#todo-post').children('[name=all]').prop('checked', isAllChecked())
         showTodo()
     })
 
