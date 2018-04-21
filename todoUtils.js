@@ -47,9 +47,9 @@ $(()=>{
         refreshTodoDone()
     })
 
-    $('.todo-delete').on('click', (e) => {
-        console.log(e[0])
-        $(e).parent().removeClass()
-        // todos.splice($(e.toElement).val(), 1)
+    $(document).on('click', '.todo-delete', (e) => {
+        const index = parseInt($(e)[0].currentTarget.value)
+        todos.splice($(e.toElement).val(), 1)
+        showTodo()
     })
 })
