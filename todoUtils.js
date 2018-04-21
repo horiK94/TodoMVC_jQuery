@@ -119,18 +119,38 @@ $(()=>{
         $('#all[name=all]').prop('disabled', false)
     }
 
-    $(document).ready(() => {
+    // completedタスクが１つでもある場合はClearCompletedボタンを表示する
+    function changeShowOrHideClearCompletedButton(){
+        const completedTaskCount = $.grep(todos, (elem, index) => {
+            return elem.isDone === true
+        }).length
+        if(completedTaskCount > 0){
+            if($('#ClearCompleted').length === 0){
+                $('<form action="post" onsubmit="return false" id="ClearCompleted">' +
+                '   <input type="button" value="Clear Completed">' +
+                '</form>').appendTo('#footer')
+            }
+        }else{
+            $('#ClearCompleted').remove()
+        }
+    }
+
+    function showAllElement(){
+        showTodo()
         changeShowOrHideAllButton()
+        changeShowOrHideClearCompletedButton()
         showResultTask()
+    }
+
+    $(document).ready(() => {
+        showAllElement()
     })
 
     $('#todo-input').change(() => {
         const text = $('#todo-post [name=todo]').val()
         addTodo(text)
-        showTodo()
         $('#todo-post [name=todo]').val('')
-        changeShowOrHideAllButton()
-        showResultTask()
+        showAllElement()
     })
 
     // チェックボックス関連
@@ -138,9 +158,7 @@ $(()=>{
         for(let i = 0; i < todos.length; i++){
             todos[i].isDone = $('#all[name=all]').prop('checked')
         }
-        changeShowOrHideAllButton()
-        showTodo()
-        showResultTask()
+        showAllElement()
     })
 
     $('#todo-list').on('click', '.todo-done', (e) => {
@@ -148,22 +166,16 @@ $(()=>{
         const index = parseInt($($($(e)[0].currentTarget).parent()[0]).context.attributes.value.value)
         todos[index].isDone = $('.todo[value='+index+']').children('.todo-done').prop('checked')
         $('#todo-post').children('[name=all]').prop('checked', isAllChecked())
-        showTodo()
-        changeShowOrHideAllButton()
-        showResultTask()
+        showAllElement()
     })
 
     $('#todo-list').on('click', '.todo-delete', (e) => {
         const index = parseInt($($($(e)[0].currentTarget).parent()[0]).context.attributes.value.value)
         todos.splice(index, 1)
-        showTodo()
-        changeShowOrHideAllButton()
-        showResultTask()
+        showAllElement()
     })
 
     $('#todo-type').on('click', '[name=showType]', () => {
-        showTodo()
-        changeShowOrHideAllButton()
-        showResultTask()
+        showAllElement()
     })
 })
