@@ -86,7 +86,7 @@ $(()=>{
 
     $('#todo-list').on('click', '.todo-delete', (e) => {
         const index = parseInt($($($(e)[0].currentTarget).parent()[0]).context.attributes.value.value)
-        todos.splice($(e.toElement).val(), 1)
+        todos.splice(index, 1)
         showTodo()
     })
 
