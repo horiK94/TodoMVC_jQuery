@@ -51,7 +51,7 @@ $(()=>{
     // checkboxを参考にtodosを書き換える
     function refreshTodoDone(){
         const checkedIndex = $(".todo input[name=todo]:checked").map((i, elem) => {
-            return parseInt($(elem).parent()[0].attributes.value.value)
+            return parseInt($(elem).parent('.todo').attr('value'))
         }).toArray()
         for(let i = 0; i < todos.length; i++){
             todos[i].isDone = jQuery.inArray(i, checkedIndex) !== -1
@@ -79,7 +79,7 @@ $(()=>{
     $('#todo-list').on('click', '.todo-done', (e) => {
         // 正直他に方法あると思う
         const index = parseInt($($($(e)[0].currentTarget).parent()[0]).context.attributes.value.value)
-        todos[index].isDone = $($('.todo-done[name=todo]')[index]).prop('checked')
+        todos[index].isDone = $('.todo[value='+index+']').children('.todo-done').prop('checked')
         $('#todo-post').children('[name=all]').prop('checked', isAllChecked())
         showTodo()
     })
