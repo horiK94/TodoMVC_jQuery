@@ -1,13 +1,6 @@
 $(()=>{
     let todos = []
 
-    $('#todo-input').change(() => {
-        const text = $('#todo-post [name=todo]').val()
-        addTodo(text)
-        showTodo()
-        $('#todo-post [name=todo]').val('')
-    })
-
     function addTodo(text){
         todos.push({'text': text, 'isDone': false})
     }
@@ -68,11 +61,60 @@ $(()=>{
         return true
     }
 
-    // チェックボックス関連
+    //全てのタスクがアクティブ状態かどうか
+    function isAllActive(){
+        for(let i = 0; i < todos.length; i++){
+            if(todos[i].isDone){
+                return false
+            }
+        }
+        return true
+    }
 
+    // Complete表示かつ全てのタスクがActiveの時、チェックボックスを操作できないようにする
+    function changeShowOrHideAllButton(){
+        const type = $('[name=showType]:checked').attr('value')
+        switch (type) {
+            case 'All':
+                if(todos.length === 0){
+                    $('#all[name=all]').prop('disabled', true)
+                    return
+                }
+                break
+            case 'Active':
+                if(isAllChecked()){
+                    $('#all[name=all]').prop('disabled', true)
+                    return
+                }
+                break
+            case 'Completed':
+                if(isAllActive()){
+                    $('#all[name=all]').prop('disabled', true)
+                    return
+                }
+                break
+        }
+        $('#all[name=all]').prop('disabled', false)
+    }
+
+    $(document).ready(() => {
+        changeShowOrHideAllButton()
+    })
+
+    $('#todo-input').change(() => {
+        const text = $('#todo-post [name=todo]').val()
+        addTodo(text)
+        showTodo()
+        $('#todo-post [name=todo]').val('')
+        changeShowOrHideAllButton()
+    })
+
+    // チェックボックス関連
     $('#all').change(() => {
-        $('.todo-done[name=todo]').prop('checked', $('#all').prop('checked'))
-        refreshTodoDone()
+        for(let i = 0; i < todos.length; i++){
+            todos[i].isDone = $('#all[name=all]').prop('checked')
+        }
+        changeShowOrHideAllButton()
         showTodo()
     })
 
@@ -82,15 +124,18 @@ $(()=>{
         todos[index].isDone = $('.todo[value='+index+']').children('.todo-done').prop('checked')
         $('#todo-post').children('[name=all]').prop('checked', isAllChecked())
         showTodo()
+        changeShowOrHideAllButton()
     })
 
     $('#todo-list').on('click', '.todo-delete', (e) => {
         const index = parseInt($($($(e)[0].currentTarget).parent()[0]).context.attributes.value.value)
         todos.splice(index, 1)
         showTodo()
+        changeShowOrHideAllButton()
     })
 
     $('#todo-type').on('click', '[name=showType]', () => {
         showTodo()
+        changeShowOrHideAllButton()
     })
 })
