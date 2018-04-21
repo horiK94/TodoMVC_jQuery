@@ -14,8 +14,21 @@ $(()=>{
 
     // 全タスクの表示
     function showTodo(){
+        const type = $('[name=showType]:checked').attr('value')
         $('.todo').remove()
         for(let i = 0; i < todos.length; i++){
+            switch (type) {
+                case 'Active':
+                    if(todos[i].isDone === true){
+                        continue
+                    }
+                    break
+                case 'Completed':
+                    if(todos[i].isDone === false){
+                        continue
+                    }
+                    break
+            }
             const todo_list = $('#todo-list').append(
                 '<div class="todo" value="'+i+'">' +
                 '   <input type="checkbox" name="todo" class="todo-done">' +
@@ -74,6 +87,10 @@ $(()=>{
     $('#todo-list').on('click', '.todo-delete', (e) => {
         const index = parseInt($($($(e)[0].currentTarget).parent()[0]).context.attributes.value.value)
         todos.splice($(e.toElement).val(), 1)
+        showTodo()
+    })
+
+    $('#todo-type').on('click', '[name=showType]', () => {
         showTodo()
     })
 })
