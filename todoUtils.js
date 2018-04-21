@@ -16,18 +16,26 @@ $(()=>{
         $('.todo').remove()
         for(let i = 0; i < todos.length; i++){
             $('#todo-list').append(
-                '<div class="todo">' +
-                '   <input type="checkbox" name="todo" class="todo-done" value="'+i+'">' +
+                '<div class="todo" value="'+i+'">' +
+                '   <input type="checkbox" name="todo" class="todo-done">' +
                 '   <span class="text">' + todos[i].text + '</span>' +
-                '   <button class="todo-delete" value="' + i + '">×</button>' +
+                '   <button class="todo-delete">×</button>' +
                 '</div>'
             )
+            if(todos[i].isDone){
+                addDoneClass($('todo-list'), index)
+            }
         }
     }
 
+    function addDoneClass(parentElement, index){
+        $(parentElement+' .todo [.todo').addClass('done')
+    }
+
+    // checkboxを参考にtodosを書き換える
     function refreshTodoDone(){
         const checkedIndex = $(".todo input[name=todo]:checked").map((i, elem) => {
-            return parseInt($(elem).val())
+            return parseInt($(elem).parent()[0].attributes.value.value)
         }).toArray()
         for(let i = 0; i < todos.length; i++){
             todos[i].isDone = jQuery.inArray(i, checkedIndex) !== -1
@@ -41,14 +49,14 @@ $(()=>{
         refreshTodoDone()
     })
 
-    $(document).on('click', '.todo-done', (e) => {
-        const index = parseInt($(e)[0].currentTarget.value)
-        todos[index].isDone = jQuery($('.todo-done[name=todo]')[index]).prop('checked')
-        refreshTodoDone()
+    $('#todo-list').on('click', '.todo-done', (e) => {
+        // 正直他に方法あると思う
+        const index = parseInt($($($(e)[0].currentTarget).parent()[0]).context.attributes.value.value)
+        todos[index].isDone = $($('.todo-done[name=todo]')[index]).prop('checked')
     })
 
-    $(document).on('click', '.todo-delete', (e) => {
-        const index = parseInt($(e)[0].currentTarget.value)
+    $('#todo-list').on('click', '.todo-delete', (e) => {
+        const index = parseInt($($($(e)[0].currentTarget).parent()[0]).context.attributes.value.value)
         todos.splice($(e.toElement).val(), 1)
         showTodo()
     })
