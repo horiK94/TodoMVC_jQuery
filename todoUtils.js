@@ -36,6 +36,28 @@ $(()=>{
         }
     }
 
+    //残りタスクを表示
+    function showResultTask(){
+        const type = $('[name=showType]:checked').attr('value')
+        switch (type) {
+            case 'All':
+                $('#left-item').text(todos.length + ' items left')
+                return
+            case 'Active':
+                const activeTaskCount = $.grep(todos, (elem, index) => {
+                    return elem.isDone === false
+                }).length
+                $('#left-item').text(activeTaskCount + ' items left')
+                return
+            case 'Completed':
+                const completedTaskCount = $.grep(todos, (elem, index) => {
+                    return elem.isDone === true
+                }).length
+                $('#left-item').text(completedTaskCount + ' items left')
+                return
+        }
+    }
+
     // doneクラスの追加(横線&灰色表示を行うクラスにつける)
     function addDoneClass(parentElement){
         $(parentElement).children('span').addClass('done')
@@ -99,6 +121,7 @@ $(()=>{
 
     $(document).ready(() => {
         changeShowOrHideAllButton()
+        showResultTask()
     })
 
     $('#todo-input').change(() => {
@@ -107,6 +130,7 @@ $(()=>{
         showTodo()
         $('#todo-post [name=todo]').val('')
         changeShowOrHideAllButton()
+        showResultTask()
     })
 
     // チェックボックス関連
@@ -116,6 +140,7 @@ $(()=>{
         }
         changeShowOrHideAllButton()
         showTodo()
+        showResultTask()
     })
 
     $('#todo-list').on('click', '.todo-done', (e) => {
@@ -125,6 +150,7 @@ $(()=>{
         $('#todo-post').children('[name=all]').prop('checked', isAllChecked())
         showTodo()
         changeShowOrHideAllButton()
+        showResultTask()
     })
 
     $('#todo-list').on('click', '.todo-delete', (e) => {
@@ -132,10 +158,12 @@ $(()=>{
         todos.splice(index, 1)
         showTodo()
         changeShowOrHideAllButton()
+        showResultTask()
     })
 
     $('#todo-type').on('click', '[name=showType]', () => {
         showTodo()
         changeShowOrHideAllButton()
+        showResultTask()
     })
 })
