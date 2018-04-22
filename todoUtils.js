@@ -121,15 +121,29 @@ $(()=>{
         }
     }
 
+    // 引数の配列データをローカルストレージに保存する
+    function saveLocalStorage(arr, key){
+        localStorage.setItem(key, JSON.stringify(arr))
+    }
+
+    function getLocalStorage(key){
+        return JSON.parse(localStorage.getItem(key))
+    }
+
     function showAllElement(){
         showTodo()
         changeShowOrHideAllButton()
         changeShowOrHideClearCompletedButton()
         changeShowOrHideFooter()
         showResultTask()
+        saveLocalStorage(todos, 'todos')
     }
 
     $(document).ready(() => {
+        todos = getLocalStorage('todos')
+        if(todos === null){
+            todos = []
+        }
         showAllElement()
     })
 
