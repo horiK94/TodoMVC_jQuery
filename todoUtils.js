@@ -149,6 +149,10 @@ $(()=>{
         const index = parseInt($($($(e)[0].currentTarget).parent()[0]).context.attributes.value.value)
         todos.splice(index, 1)
         showAllElement()
+        //全ての要素がcompletedになっているかどうかのcheck
+        if(isAllChecked()){
+            $('#all[name=all]').prop('checked', true)
+        }
     })
 
     $('#todo-type').on('click', '[name=showType]', () => {
