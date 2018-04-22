@@ -41,6 +41,10 @@ $(()=>{
         const activeTaskCount = $.grep(todos, (elem, index) => {
             return elem.isDone === false
         }).length
+        if(activeTaskCount === 1){
+            $('#left-item').text('1 item left')
+            return
+        }
         $('#left-item').text(activeTaskCount + ' items left')
     }
 
