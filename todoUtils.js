@@ -73,6 +73,14 @@ $(()=>{
         return true
     }
 
+    function changeShowOrHideFooter(){
+        if(todos.length === 0){
+            $('#footer').hide()
+            return
+        }
+        $('#footer').show()
+    }
+
     // Complete表示かつ全てのタスクがActiveの時、チェックボックスを操作できないようにする
     function changeShowOrHideAllButton(){
         const type = $('[name=showType]:checked').attr('value')
@@ -117,6 +125,7 @@ $(()=>{
         showTodo()
         changeShowOrHideAllButton()
         changeShowOrHideClearCompletedButton()
+        changeShowOrHideFooter()
         showResultTask()
     }
 
