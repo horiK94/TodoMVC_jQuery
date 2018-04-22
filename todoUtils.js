@@ -122,7 +122,7 @@ $(()=>{
     }
 
     // 引数の配列データをローカルストレージに保存する
-    function saveLocalStorage(arr, key){
+    function saveLocalStorage(key, arr){
         localStorage.setItem(key, JSON.stringify(arr))
     }
 
@@ -136,7 +136,8 @@ $(()=>{
         changeShowOrHideClearCompletedButton()
         changeShowOrHideFooter()
         showResultTask()
-        saveLocalStorage(todos, 'todos')
+        saveLocalStorage('todos', todos)
+        saveLocalStorage('type', $('[name=showType]:checked').attr('value'))
     }
 
     $(document).ready(() => {
@@ -144,6 +145,14 @@ $(()=>{
         if(todos === null){
             todos = []
         }
+
+        let type = getLocalStorage('type')
+        if(type === null){
+            type = 'All'
+        }
+
+        $('[name=showType]').val([type])
+
         showAllElement()
     })
 
