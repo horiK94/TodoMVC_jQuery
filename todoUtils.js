@@ -114,9 +114,6 @@ $(()=>{
         const completedTaskCount = $.grep(todos, (elem, index) => {
             return elem.isDone === true
         }).length
-        console.log($.grep(todos, (elem, index) => {
-            return elem.isDone === true
-        }))
         if(completedTaskCount > 0){
             if($('#footer button').length === 0){
                 $('<button>Clear Completed</button>').appendTo('#footer')
@@ -142,6 +139,8 @@ $(()=>{
         addTodo(text)
         $('#todo-post [name=todo]').val('')
         showAllElement()
+
+        $('#all[name=all]').prop('checked', false)
     })
 
     // チェックボックス関連
@@ -178,6 +177,7 @@ $(()=>{
             }
         }
         todos = activeTodosArray
+        $('#all[name=all]').prop('checked', false)
         showAllElement()
     })
 })
