@@ -63,16 +63,6 @@ $(()=>{
         $(parentElement).children('span').addClass('done')
     }
 
-    // checkboxを参考にtodosを書き換える
-    function refreshTodoDone(){
-        const checkedIndex = $(".todo input[name=todo]:checked").map((i, elem) => {
-            return parseInt($(elem).parent('.todo').attr('value'))
-        }).toArray()
-        for(let i = 0; i < todos.length; i++){
-            todos[i].isDone = jQuery.inArray(i, checkedIndex) !== -1
-        }
-    }
-
     // 全てのタスクが完了しているかどうか
     function isAllChecked(){
         for(let i = 0; i < todos.length; i++){
@@ -124,14 +114,15 @@ $(()=>{
         const completedTaskCount = $.grep(todos, (elem, index) => {
             return elem.isDone === true
         }).length
+        console.log($.grep(todos, (elem, index) => {
+            return elem.isDone === true
+        }))
         if(completedTaskCount > 0){
-            if($('#ClearCompleted').length === 0){
-                $('<form action="post" onsubmit="return false" id="ClearCompleted">' +
-                '   <input type="button" value="Clear Completed">' +
-                '</form>').appendTo('#footer')
+            if($('#footer button').length === 0){
+                $('<button>Clear Completed</button>').appendTo('#footer')
             }
         }else{
-            $('#ClearCompleted').remove()
+            $('#footer button').remove()
         }
     }
 
@@ -176,6 +167,17 @@ $(()=>{
     })
 
     $('#todo-type').on('click', '[name=showType]', () => {
+        showAllElement()
+    })
+
+    $('#footer').on('click', 'button', () => {
+        let activeTodosArray = []
+        for(let i = 0; i < todos.length; i++){
+            if(!todos[i].isDone){
+                activeTodosArray.push(todos[i])
+            }
+        }
+        todos = activeTodosArray
         showAllElement()
     })
 })
