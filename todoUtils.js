@@ -38,24 +38,10 @@ $(()=>{
 
     //残りタスクを表示
     function showResultTask(){
-        const type = $('[name=showType]:checked').attr('value')
-        switch (type) {
-            case 'All':
-                $('#left-item').text(todos.length + ' items left')
-                return
-            case 'Active':
-                const activeTaskCount = $.grep(todos, (elem, index) => {
-                    return elem.isDone === false
-                }).length
-                $('#left-item').text(activeTaskCount + ' items left')
-                return
-            case 'Completed':
-                const completedTaskCount = $.grep(todos, (elem, index) => {
-                    return elem.isDone === true
-                }).length
-                $('#left-item').text(completedTaskCount + ' items left')
-                return
-        }
+        const activeTaskCount = $.grep(todos, (elem, index) => {
+            return elem.isDone === false
+        }).length
+        $('#left-item').text(activeTaskCount + ' items left')
     }
 
     // doneクラスの追加(横線&灰色表示を行うクラスにつける)
